@@ -128,30 +128,30 @@ def train(epoch,optimizer):
 
 # Test
 def test(epoch):
-    net.eval()
-    test_loss = 0
-    correct = 0
-    total = 0
-    with torch.no_grad():
-        for batch_idx, (inputs, targets) in enumerate(testloader):
-            inputs, targets = inputs.to(device), targets.to(device)
-            outputs = net.forward(inputs)
-	    outputs=net.predict(outputs)
-            loss = criterion(outputs, targets)
+	net.eval()
+	test_loss = 0
+	correct = 0
+	total = 0
+	with torch.no_grad():
+		for batch_idx, (inputs, targets) in enumerate(testloader):
+			inputs, targets = inputs.to(device), targets.to(device)
+			outputs = net.forward(inputs)
+			outputs=net.predict(outputs)
+			loss = criterion(outputs, targets)
 
-            test_loss += loss.item()
-            _, predicted = outputs.max(1)
-            total += targets.size(0)
-            correct += predicted.eq(targets).sum().item()
-	    if batch_idx%100==0:
-		print()
-		print('TEST')
-		progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-                % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
+			test_loss += loss.item()
+			_, predicted = outputs.max(1)
+			total += targets.size(0)
+			correct += predicted.eq(targets).sum().item()
+			if batch_idx%100==0:
+				print()
+				print('TEST')
+				progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
+				% (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
-    # Save checkpoint.
-    acc = 100.*correct/total
-    return acc
+	# Save checkpoint.
+	acc = 100.*correct/total
+	return acc
 
 
 
