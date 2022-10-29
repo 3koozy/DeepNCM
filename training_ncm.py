@@ -182,15 +182,16 @@ def loop(epochs=200,dataset_name='cifar'+str(args.dataset)):
 
 		# Validate the model
 		result = test(epoch)
+		
+		#show stats:
+		print("training loss : {}, training acc : {}, test acc : {}".format(loss_epoch, acc_epoch, result))
+		# Update lists (for visualization purposes)
+		accuracies_test.append(result)
+		accuracy_training.append(acc_epoch)
+		losses_training.append(loss_epoch)
+		iters.append(epoch)
 
 		if visualize:
-			# Update lists (for visualization purposes)
-			accuracies_test.append(result)
-			accuracy_training.append(acc_epoch)
-			losses_training.append(loss_epoch)
-			iters.append(epoch)
-	
-
 			# Print results
 			vis.line(
 					X=np.array(iters),
@@ -219,6 +220,9 @@ def loop(epochs=200,dataset_name='cifar'+str(args.dataset)):
 						'ylabel': 'accuracy'},
 			    			name='Validation Accuracy ',
 			    		win=12)
-
+	print("training finished.")
+	print("losses_training :\n", losses_training)
+	print("accuracy_training :\n", accuracy_training)
+	print("accuracies_test :\n", accuracies_test)
 
 loop(epochs=EPOCHS)
