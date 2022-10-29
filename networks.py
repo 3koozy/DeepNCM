@@ -119,7 +119,7 @@ class ResNet_iNCM(nn.Module):
         return out
 
     def prepare(self,y):
-	self.linear.init_from_labels(y)
+        self.linear.init_from_labels(y)
 
 
 def ResNet18():
