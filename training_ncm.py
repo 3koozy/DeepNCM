@@ -87,43 +87,43 @@ criterion = nn.CrossEntropyLoss()
 
 # Training, single epoch
 def train(epoch,optimizer):
-    print('\nEpoch: %d' % epoch)
-    net.train()
-    train_loss = 0
-    correct = 0
-    total = 0
-    for batch_idx, (inputs, targets) in enumerate(trainloader):
-        inputs= inputs.to(device)
-	targets_dev=targets.to(device)
-        optimizer.zero_grad()
+	print('\nEpoch: %d' % epoch)
+	net.train()
+	train_loss = 0
+	correct = 0
+	total = 0
+	for batch_idx, (inputs, targets) in enumerate(trainloader):
+		inputs= inputs.to(device)
+		targets_dev=targets.to(device)
+		optimizer.zero_grad()
 
-	# Produce features
-        outputs = net.forward(inputs)
+		# Produce features
+		outputs = net.forward(inputs)
 
-	# Predict using current class means
-	prediction=net.predict(outputs)
+		# Predict using current class means
+		prediction=net.predict(outputs)
 
-	# Apply loss
-	loss = criterion(prediction, targets_dev)
+		# Apply loss
+		loss = criterion(prediction, targets_dev)
 
-	# Backward + update
-        loss.backward()
-        optimizer.step()
+		# Backward + update
+		loss.backward()
+		optimizer.step()
 
-	# Update class means
-	net.update_means(outputs,targets)
+		# Update class means
+		net.update_means(outputs,targets)
 
-	# Printing stuff
-        train_loss += loss.item()
-        _, predicted = prediction.max(1)
-        total += targets.size(0)
-        correct += predicted.eq(targets_dev).sum().item()
-	if batch_idx%200==0:
-		print()
-		print('TRAINING')
-        	progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-            % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
-    return (train_loss/(batch_idx+1)), 100.*correct/total
+		# Printing stuff
+		train_loss += loss.item()
+		_, predicted = prediction.max(1)
+		total += targets.size(0)
+		correct += predicted.eq(targets_dev).sum().item()
+		if batch_idx%200==0:
+			print()
+			print('TRAINING')
+			progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
+			% (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+	return (train_loss/(batch_idx+1)), 100.*correct/total
 
 
 # Test
